@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pas Foto Sheet Generator</title>
+</head>
+<body>
+    <h2>Pas Foto Sheet Generator</h2>
+
+    <form method="POST" enctype="multipart/form-data" id="uploadForm">
+        <label>Upload Foto:</label><br>
+        <input type="file" name="photo" id="photoInput" accept="image/*" required><br><br>
+
+        <label>Pilih Ukuran Pas Foto:</label><br>
+        <select name="size" id="sizeSelect">
+            <option value="2x3">2x3 cm</option>
+            <option value="3x4">3x4 cm</option>
+            <option value="4x6">4x6 cm</option>
+        </select><br><br>
+
+        <label>Pilih Background:</label><br>
+        <select name="bgcolor" id="bgcolorSelect">
+            <option value="none">Tidak Diubah</option>
+            <option value="blue">Biru</option>
+            <option value="red">Merah</option>
+        </select><br><br>
+
+        <label>Pilih Ukuran Kertas:</label><br>
+        <select name="papersize">
+            <option value="A4">A4</option>
+            <option value="A5">A5</option>
+        </select><br><br>
+
+        <label>Pilih Jumlah Foto:</label><br>
+        <input type="number" name="count" min="1" max="20" value="4"><br><br>
+
+        <button type="submit">Proses</button>
+        <button type="button" id="resetBtn">Reset</button>
+    </form>
+
+    <h3>Preview Foto</h3>
+    <canvas id="previewCanvas" style="border:1px solid #ccc;"></canvas>
+
+    <script>
+        const photoInput = document.getElementById('photoInput');
+        const sizeSelect = document.getElementById('sizeSelect');
+        const bgcolorSelect = document.getElementById('bgcolorSelect');
+        const previewCanvas = document.getElementById('previewCanvas');
+        const ctx = previewCanvas.getContext('2d');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function cmToPx(cm) {
+            const dpi = 300;
+            return Math.floor(cm * (dpi / 2.54));
+        }
+
+        const PHOTO_SIZES = {
+            "2x3": [cmToPx(2), cmToPx(3)],
+            "3x4": [cmToPx(3), cmToPx(4)],
+            "4x6": [cmToPx(4), cmToPx(6)]
+        };
+
+        function updatePreview() {
+            if (!photoInput.files[0]) return;
+            const file = photoInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const [w, h] = PHOTO_SIZES[sizeSelect.value];
+                    previewCanvas.width = w;
+                    previewCanvas.height = h;
+                    // fill background
+                    let bgColor = bgcolorSelect.value;
+                    if (bgColor === "none") bgColor = "white";
+                    ctx.fillStyle = bgColor;
+                    ctx.fillRect(0, 0, w, h);
+                    // draw image
+                    ctx.drawImage(img, 0, 0, w, h);
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        photoInput.addEventListener('change', updatePreview);
+        sizeSelect.addEventListener('change', updatePreview);
+        bgcolorSelect.addEventListener('change', updatePreview);
+
+        resetBtn.addEventListener('click', () => {
+            document.getElementById('uploadForm').reset();
+            ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+        });
+    </script>
+</body>
+</html>

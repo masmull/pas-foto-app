@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hasil Pas Foto</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f2f4f7;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        /* 🔥 cara resize yang aman */
+        .preview-wrapper {
+            margin-top: 20px;
+        }
+
+        .preview-wrapper img {
+            max-width: 50%;   /* tampil 50% */
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .buttons {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        button {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>🖨️ Hasil Sheet {{ papersize }} ({{ placed }} foto)</h2>
+
+    <div class="preview-wrapper">
+        <img src="{{ image_url }}">
+    </div>
+
+    <div class="buttons">
+        <a href="{{ image_url }}" download>
+            <button class="btn-primary">Download</button>
+        </a>
+
+        <a href="/">
+            <button class="btn-secondary">Kembali</button>
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>
